@@ -8,7 +8,7 @@ description: Add a new recipe to the recipe book from a URL or pasted text. Use 
 1. Get the recipe source (fetch the URL, or use text the user provided).
 2. Pick a short, blunt, descriptive name (see Naming) and its kebab-case slug, e.g. `Yellow Layer Cake` → `yellow-layer-cake`. Ensure `recipes/<slug>/` doesn't already exist.
 3. Create the three files below in `recipes/<slug>/`.
-4. Append the slug to the JSON array in `recipes/index.json` (exact case; folder name must match).
+4. Run `make index` to rebuild `recipes/index.json` from the recipe folders (sorted).
 5. Verify: `make start`, open `http://localhost:8000/#/<slug>`, confirm it renders and appears in search, then `make stop`.
 
 ## Naming
@@ -39,6 +39,7 @@ url: https://example.com/source-recipe/
 
 - `preheat` / `cook_time`: use `null` if not applicable (e.g. no oven); null fields are hidden on the site.
 - `chill` / `yield`: optional, e.g. `chill: at least 3 hours, preferably overnight`, `yield: 14–15 large cookies`. Omit if not given.
+- Marinades: if no time is given, use `chill: at least 1 hour, ideally overnight` and say the same in the marinate step.
 - `url`: the source page. Not shown on the site; used to pull future updates.
 - `images`: optional. Files live in `recipes/<slug>/images/`; list filenames in display order, e.g. `images: [finished.jpg, step-2.jpg]`. Omit if there are no photos. Only add photos the user provides — don't download images from the source site.
 - `category`: one word/phrase, e.g. Breakfast, Dinner, Dessert, Side, Snack.
@@ -46,6 +47,11 @@ url: https://example.com/source-recipe/
 ## measurements.csv
 
 Header row `amount,ingredient`, one ingredient per row. Quote any field containing a comma.
+
+- Butter and cheese: always include grams in parentheses after the amount, e.g. `2 tbsp (28g)`, `1 cup (113g)` shredded cheddar. Use butter 1 tbsp = 14g / 1 cup = 227g; shredded cheese ~113g per cup; finely grated hard cheese ~100g per cup; 1 oz = 28g. Skip for `to taste` / `as needed` / `optional`.
+- Pounds: always add grams in parentheses, e.g. `2 lb (907g)`, `4 lb (1.8kg)` (1 lb = 454g; use kg above 1000g). Applies in instructions too.
+- Containers, jars, cans, packages: include size with grams, e.g. `1 jar (24 oz / 680g)`. If the size isn't given, use the standard US size and mention the assumption.
+- Ratio recipes (e.g. spice blends): keep amounts as parts (`4 parts`) with no fixed units or grams, and add a first step explaining how to pick a part size.
 
 ```csv
 amount,ingredient
