@@ -61,7 +61,8 @@ async function loadRecipe(slug) {
     fetchText(base + 'instructions.csv'),
   ]);
   const meta = parseYAML(desc);
-  const tags = Array.isArray(meta.tags) ? meta.tags : (meta.tags ? meta.tags.split(',').map(s => s.trim()) : []);
+  const list = v => Array.isArray(v) ? v : (v ? v.split(',').map(s => s.trim()) : []);
+  const tags = list(meta.tags);
   const recipe = {
     slug,
     title: meta.title || slug,
@@ -70,6 +71,7 @@ async function loadRecipe(slug) {
     preheat: meta.preheat || '',
     cookTime: meta.cook_time || '',
     tags,
+    images: list(meta.images).map(f => `${base}images/${encodeURIComponent(f)}`),
     measurements: parseCSV(measurements).map(r => r.join(' ').trim()),
     instructions: parseCSV(instructions).map(r => r.join(' ').trim()),
   };
@@ -125,6 +127,15 @@ function renderRecipe(r) {
   if (r.category || r.tags.length) recipeEl.append(metaLine(r));
   if (r.description) recipeEl.append(el('p', r.description));
   if (times) recipeEl.append(el('p', times, { className: 'times' }));
+  if (r.images.length) {
+    const gallery = el('div', '', { className: 'gallery' });
+    r.images.forEach(src => {
+      const a = el('a', '', { href: src, target: '_blank' });
+      a.append(el('img', '', { src, alt: r.title, loading: 'lazy' }));
+      gallery.append(a);
+    });
+    recipeEl.append(gallery);
+  }
   recipeEl.append(columns);
 }
 
