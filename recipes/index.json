@@ -1,4 +1,5 @@
 [
+  "american-teriyaki-marinade",
   "apple-cider-chicken",
   "apple-pie",
   "baked-mac-and-cheese",
@@ -18,7 +19,6 @@
   "cacio-e-pepe-risotto",
   "cacio-e-pepe-with-parmesan",
   "chai-tea",
-  "chicken-marinade",
   "chicken-pad-thai",
   "chicken-parmesan",
   "chocolate-nut-fudge",
@@ -84,6 +84,8 @@
   "spinach-ricotta-ravioli",
   "spinach-ricotta-ravioli-filling",
   "sticky-toffee-pudding",
+  "stuffing",
+  "teriyaki-chicken-risotto",
   "turkey-brine",
   "vanilla-buttercream-frosting",
   "vanilla-cake",
