@@ -2,7 +2,7 @@ PORT ?= 8000
 PYTHON ?= python
 PID_FILE := .server.pid
 
-.PHONY: start stop restart
+.PHONY: start stop restart index
 
 start:
 	@if [ -f $(PID_FILE) ] && kill -0 $$(cat $(PID_FILE)) 2>/dev/null; then \
@@ -22,3 +22,14 @@ stop:
 	fi
 
 restart: stop start
+
+# Rebuild recipes/index.json from recipe folders, sorted alphabetically.
+index:
+	@$(PYTHON) -c 'import json, pathlib; \
+	p = pathlib.Path("recipes/index.json"); \
+	old = set(json.loads(p.read_text())) if p.exists() else set(); \
+	new = sorted(d.name for d in pathlib.Path("recipes").iterdir() if (d / "description.yml").is_file()); \
+	p.write_text(json.dumps(new, indent=2) + "\n"); \
+	[print("+", s) for s in sorted(set(new) - old)]; \
+	[print("-", s) for s in sorted(old - set(new))]; \
+	print(f"{len(new)} recipes in {p}")'
