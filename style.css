@@ -264,6 +264,24 @@ body.detail header h1 {
   transform: translateX(-4px);
 }
 
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.share {
+  font: inherit;
+  font-weight: 500;
+  color: inherit;
+  border: 0;
+  cursor: pointer;
+}
+
+.share:hover {
+  transform: translateY(-2px);
+}
+
 #recipe h2 {
   font-size: clamp(2.25rem, 6vw, 3.75rem);
   font-weight: 900;

@@ -167,11 +167,26 @@ function renderRecipe(r) {
     className: 'steps'
   });
   r.instructions.forEach(s => ol.append(el('li', s)));
-  const back = el('p');
+  const back = el('p', '', {
+    className: 'actions'
+  });
+  const share = el('button', '🔗 Share', {
+    type: 'button',
+    className: 'back share'
+  });
+  share.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      share.textContent = '✓ Link copied';
+    } catch {
+      share.textContent = 'Copy failed';
+    }
+    setTimeout(() => share.textContent = '🔗 Share', 2000);
+  });
   back.append(el('a', '← All recipes', {
     href: '#',
     className: 'back'
-  }));
+  }), share);
   const measurementsCol = el('section', '', {
     className: 'panel'
   });
