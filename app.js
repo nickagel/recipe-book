@@ -70,6 +70,8 @@ async function loadRecipe(slug) {
     category: meta.category || '',
     preheat: meta.preheat || '',
     cookTime: meta.cook_time || '',
+    chill: meta.chill || '',
+    yield: meta.yield || '',
     tags,
     images: list(meta.images).map(f => `${base}images/${encodeURIComponent(f)}`),
     measurements: parseCSV(measurements).map(r => r.join(' ').trim()),
@@ -134,6 +136,8 @@ function renderRecipe(r) {
   const times = el('div', '', { className: 'chips' });
   if (r.preheat) times.append(el('span', `🔥 Preheat ${r.preheat}`, { className: 'chip' }));
   if (r.cookTime) times.append(el('span', `⏱ ${r.cookTime}`, { className: 'chip' }));
+  if (r.chill) times.append(el('span', `❄️ Chill ${r.chill}`, { className: 'chip' }));
+  if (r.yield) times.append(el('span', `🍽 ${r.yield}`, { className: 'chip' }));
   recipeEl.replaceChildren(back, el('h2', r.title));
   if (r.category || r.tags.length) recipeEl.append(metaLine(r));
   if (r.description) recipeEl.append(el('p', r.description, { className: 'lede' }));
