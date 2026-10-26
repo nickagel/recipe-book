@@ -6,17 +6,29 @@ description: Add a new recipe to the recipe book from a URL or pasted text. Use 
 # Add a recipe
 
 1. Get the recipe source (fetch the URL, or use text the user provided).
-2. Pick a kebab-case slug from the title, e.g. `ham-cheese-scones`. Ensure `recipes/<slug>/` doesn't already exist.
+2. Pick a short, blunt, descriptive name (see Naming) and its kebab-case slug, e.g. `Yellow Layer Cake` → `yellow-layer-cake`. Ensure `recipes/<slug>/` doesn't already exist.
 3. Create the three files below in `recipes/<slug>/`.
 4. Append the slug to the JSON array in `recipes/index.json` (exact case; folder name must match).
 5. Verify: `make start`, open `http://localhost:8000/#/<slug>`, confirm it renders and appears in search, then `make stop`.
+
+## Naming
+
+Name the recipe for what it is, not how the source markets it. The slug is the title in kebab-case.
+
+- Drop hype and filler: best, ultimate, perfect, easy, quick, simple, classic, authentic, homemade, gourmet, famous, marvelous, "the", "my favorite", "world's", "melt in your mouth", "just like X", "million dollar".
+- Never include the source site or author (no `-sallys-baking`, `-allrecipes`).
+- Drop number-of-ingredients prefixes ("3-Ingredient").
+- Prefer the plain dish name in English: `Chicken Marinade`, `Pumpkin Pie`, `Jollof Rice`, `Grilled Rice Balls` (not `Yaki Onigiri`).
+- Replace vague brand-ish names with what's in it: `Million Dollar Fudge` → `Chocolate Nut Fudge`.
+- Keep a descriptor only if it changes what the dish is (`Whole Wheat Mac and Cheese`, `Cacio e Pepe Risotto`), not if it's just praise (`Fluffy`, `Crispy`).
+- If the name collides with an existing recipe, add the real difference (main ingredient, method, or variation), e.g. `Cacio e Pepe with Parmesan` — never the site name.
 
 ## description.yml
 
 Flat YAML only (the site uses a minimal parser — no nesting or multi-line values).
 
 ```yaml
-title: Ham & Cheese Scones
+title: Yellow Layer Cake
 description: One sentence summary.
 tags: [scones, ham, cheese, breakfast]
 category: Breakfast
@@ -26,6 +38,7 @@ url: https://example.com/source-recipe/
 ```
 
 - `preheat` / `cook_time`: use `null` if not applicable (e.g. no oven); null fields are hidden on the site.
+- `chill` / `yield`: optional, e.g. `chill: at least 3 hours, preferably overnight`, `yield: 14–15 large cookies`. Omit if not given.
 - `url`: the source page. Not shown on the site; used to pull future updates.
 - `images`: optional. Files live in `recipes/<slug>/images/`; list filenames in display order, e.g. `images: [finished.jpg, step-2.jpg]`. Omit if there are no photos. Only add photos the user provides — don't download images from the source site.
 - `category`: one word/phrase, e.g. Breakfast, Dinner, Dessert, Side, Snack.
