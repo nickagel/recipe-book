@@ -47,6 +47,9 @@ url: https://example.com/source-recipe/
 
 Header row `amount,ingredient`, one ingredient per row. Quote any field containing a comma.
 
+- Butter and cheese: always include grams in parentheses after the amount, e.g. `2 tbsp (28g)`, `1 cup (113g)` shredded cheddar. Use butter 1 tbsp = 14g / 1 cup = 227g; shredded cheese ~113g per cup; finely grated hard cheese ~100g per cup; 1 oz = 28g. Skip for `to taste` / `as needed` / `optional`.
+- Pounds: always add grams in parentheses, e.g. `2 lb (907g)`, `4 lb (1.8kg)` (1 lb = 454g; use kg above 1000g). Applies in instructions too.
+
 ```csv
 amount,ingredient
 2 cups (250g),"all-purpose flour, plus more for work surface"
