@@ -2,6 +2,6 @@ title: Chocolate Nut Fudge
 description: A big batch of extra creamy chocolate fudge made with chocolate chips, German sweet chocolate, marshmallow creme, and nuts.
 tags: [fudge, chocolate, candy, dessert, nuts]
 category: Dessert
-preheat: null
+preheat:
 cook_time: 15 minutes
 url: https://www.allrecipes.com/recipe/9436/million-dollar-fudge/

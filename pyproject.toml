@@ -1,0 +1,13 @@
+[tool.yamlfix]
+# The site's YAML parser needs flat, single-line values and inline tag lists.
+explicit_start = false
+line_length = 1000
+sequence_style = "keep_style"
+quote_basic_values = false
+whitelines = 1
+section_whitelines = 1
+
+[tool.djlint]
+profile = "html"
+indent = 2
+max_line_length = 120

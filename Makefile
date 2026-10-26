@@ -9,6 +9,8 @@ default help: ## show help message
 PORT ?= 8000
 PYTHON ?= python
 PID_FILE := .server.pid
+VENV := .venv
+BIN := $(VENV)/bin
 
 .PHONY: start
 start: ## start the local server
@@ -19,8 +21,8 @@ start: ## start the local server
 		$(PYTHON) -m http.server $(PORT) --bind 127.0.0.1 > /dev/null 2>&1 & echo $$! > $(PID_FILE); \
 		echo "Server started at http://localhost:$(PORT)"; \
 	fi
-.PHONY: stop ## stop the local server
-stop:
+.PHONY: stop
+stop: ## stop the local server
 	@if [ -f $(PID_FILE) ]; then \
 		kill $$(cat $(PID_FILE)) 2>/dev/null && echo "Server stopped" || echo "Server not running"; \
 		rm -f $(PID_FILE); \
@@ -28,11 +30,11 @@ stop:
 		echo "Server not running"; \
 	fi
 
-.PHONY: restart ## restart the local server
-restart: stop start
+.PHONY: restart
+restart: stop start ## restart the local server
 
-.PHONY: index ## rebuild recipes/index.json from recipe folders
-index:
+.PHONY: index
+index: ## rebuild recipes/index.json from recipe folders
 	@$(PYTHON) -c 'import json, pathlib; \
 	p = pathlib.Path("recipes/index.json"); \
 	old = set(json.loads(p.read_text())) if p.exists() else set(); \
@@ -41,3 +43,17 @@ index:
 	[print("+", s) for s in sorted(set(new) - old)]; \
 	[print("-", s) for s in sorted(old - set(new))]; \
 	print(f"{len(new)} recipes in {p}")'
+
+.PHONY: install
+install: ## install formatting tools into .venv
+	$(PYTHON) -m venv $(VENV)
+	$(BIN)/pip install -q -r requirements.txt
+
+.PHONY: format
+format: ## format yml, csv, json, js and html files
+	@[ -x $(BIN)/yamlfix ] || { echo "run: make install"; exit 1; }
+	$(BIN)/yamlfix $$(find recipes .github .claude -name '*.yml')
+	$(PYTHON) scripts/format_data.py
+	$(BIN)/js-beautify --replace --indent-size 2 app.js
+	# djlint exits 1 when it reformats a file
+	$(BIN)/djlint index.html --reformat --quiet || [ $$? -eq 1 ]

@@ -2,6 +2,6 @@ title: Cacio e Pepe
 description: Roman pasta in a smooth Pecorino and toasted black pepper sauce, stabilized with a cornstarch slurry so it never clumps.
 tags: [pasta, cheese, pepper, italian, dinner]
 category: Dinner
-preheat: null
+preheat:
 cook_time: 12 minutes
 url: https://www.themediterraneandish.com/cacio-e-pepe/

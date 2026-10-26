@@ -2,7 +2,7 @@ title: Béchamel Sauce
 description: Smooth white sauce of butter, flour, and milk seasoned with salt, pepper, and nutmeg.
 tags: [sauce, bechamel, white sauce, french]
 category: Sauce
-preheat: null
+preheat:
 cook_time: 15 minutes
 yield: about 2 1/2 cups
 url: https://www.epicurious.com/recipes/food/views/white-sauce-or-bechamel-sauce-40046

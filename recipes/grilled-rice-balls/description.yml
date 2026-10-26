@@ -2,6 +2,6 @@ title: Grilled Rice Balls
 description: Japanese rice balls seasoned with soy and sesame, pan-grilled until crisp, and glazed with soy sauce until golden and caramelized.
 tags: [rice, onigiri, japanese, soy sauce, snack]
 category: Snack
-preheat: null
+preheat:
 cook_time: 15 minutes
 url: https://www.justonecookbook.com/yaki-onigiri-grilled-rice-ball/

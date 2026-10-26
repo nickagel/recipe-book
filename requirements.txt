@@ -1,0 +1,3 @@
+djlint==1.36.4
+jsbeautifier==1.15.4
+yamlfix==1.17.0

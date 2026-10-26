@@ -2,6 +2,6 @@ title: Honey Garlic Chicken
 description: Chicken marinated in a honey, soy, garlic, and lemon mixture then grilled and basted for a sticky glaze.
 tags: [chicken, honey, garlic, grilled, dinner]
 category: Dinner
-preheat: null
+preheat:
 cook_time: 15 minutes
 url: https://therecipecritic.com/honey-garlic-chicken/

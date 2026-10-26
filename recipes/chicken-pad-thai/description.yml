@@ -2,6 +2,6 @@ title: Chicken Pad Thai
 description: Chicken and rice noodle stir-fry with egg, tofu, and bean sprouts in a tangy tamarind sauce, finished with peanuts and lime.
 tags: [noodles, chicken, thai, stir-fry, dinner]
 category: Dinner
-preheat: null
+preheat:
 cook_time: 10 minutes
 url: https://www.recipetineats.com/chicken-pad-thai/
