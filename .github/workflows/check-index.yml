@@ -1,0 +1,27 @@
+name: Check recipe index
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Pinned to 3.x; .python-version's 3.15 may not be available on runners.
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.15"
+
+      - name: Rebuild index
+        run: make index PYTHON=python
+
+      - name: Fail if index is out of date
+        run: |
+          if ! git diff --exit-code recipes/index.json; then
+            echo "::error file=recipes/index.json::recipes/index.json is out of date. Run 'make index' and commit the result."
+            exit 1
+          fi
