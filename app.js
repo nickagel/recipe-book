@@ -88,7 +88,8 @@ function el(tag, text, attrs = {}) {
 }
 
 function metaLine(r) {
-  const p = el('p', r.category ? `${r.category} ` : '', { className: 'meta' });
+  const p = el('p', '', { className: 'meta' });
+  if (r.category) p.append(el('span', r.category, { className: 'category' }));
   r.tags.forEach(t => p.append(el('span', t, { className: 'tag' })));
   return p;
 }
@@ -97,36 +98,46 @@ function renderList() {
   const terms = searchEl.value.toLowerCase().split(/\s+/).filter(Boolean);
   const matches = recipes.filter(r => terms.every(t => r.haystack.includes(t)));
   resultsEl.replaceChildren(...matches.map(r => {
-    const li = el('li');
-    li.append(el('a', r.title, { href: `#/${encodeURIComponent(r.slug)}` }));
-    if (r.description) li.append(el('div', r.description));
-    if (r.category || r.tags.length) li.append(metaLine(r));
+    const li = el('li', '', { className: 'card' });
+    const cover = el('div', '', { className: 'cover' });
+    if (r.images.length) cover.append(el('img', '', { src: r.images[0], alt: '', loading: 'lazy' }));
+    else cover.textContent = r.title.charAt(0);
+    const body = el('div', '', { className: 'card-body' });
+    body.append(el('a', r.title, { href: `#/${encodeURIComponent(r.slug)}`, className: 'card-link' }));
+    if (r.description) body.append(el('p', r.description, { className: 'card-desc' }));
+    if (r.category || r.tags.length) body.append(metaLine(r));
+    li.append(cover, body);
     return li;
   }));
-  if (!matches.length) resultsEl.append(el('li', 'No recipes found.'));
+  if (!matches.length) resultsEl.append(el('li', 'No recipes found. Try another search!', { className: 'empty' }));
 }
 
 function renderRecipe(r) {
-  const ul = el('ul');
-  r.measurements.forEach(m => ul.append(el('li', m)));
-  const ol = el('ol');
+  const ul = el('ul', '', { className: 'ingredients' });
+  r.measurements.forEach(m => {
+    const label = el('label');
+    label.append(el('input', '', { type: 'checkbox' }), el('span', m));
+    const li = el('li');
+    li.append(label);
+    ul.append(li);
+  });
+  const ol = el('ol', '', { className: 'steps' });
   r.instructions.forEach(s => ol.append(el('li', s)));
   const back = el('p');
-  back.append(el('a', '← All recipes', { href: '#' }));
-  const measurementsCol = el('section');
+  back.append(el('a', '← All recipes', { href: '#', className: 'back' }));
+  const measurementsCol = el('section', '', { className: 'panel' });
   measurementsCol.append(el('h3', 'Measurements'), ul);
-  const instructionsCol = el('section');
+  const instructionsCol = el('section', '', { className: 'panel' });
   instructionsCol.append(el('h3', 'Instructions'), ol);
   const columns = el('div', '', { className: 'columns' });
   columns.append(measurementsCol, instructionsCol);
-  const times = [
-    r.preheat && `Preheat: ${r.preheat}`,
-    r.cookTime && `Cook time: ${r.cookTime}`,
-  ].filter(Boolean).join(' · ');
+  const times = el('div', '', { className: 'chips' });
+  if (r.preheat) times.append(el('span', `🔥 Preheat ${r.preheat}`, { className: 'chip' }));
+  if (r.cookTime) times.append(el('span', `⏱ ${r.cookTime}`, { className: 'chip' }));
   recipeEl.replaceChildren(back, el('h2', r.title));
   if (r.category || r.tags.length) recipeEl.append(metaLine(r));
-  if (r.description) recipeEl.append(el('p', r.description));
-  if (times) recipeEl.append(el('p', times, { className: 'times' }));
+  if (r.description) recipeEl.append(el('p', r.description, { className: 'lede' }));
+  if (times.children.length) recipeEl.append(times);
   if (r.images.length) {
     const gallery = el('div', '', { className: 'gallery' });
     r.images.forEach(src => {
@@ -145,8 +156,10 @@ function route() {
   resultsEl.hidden = !!recipe;
   searchEl.hidden = !!recipe;
   recipeEl.hidden = !recipe;
+  document.body.classList.toggle('detail', !!recipe);
   if (recipe) renderRecipe(recipe);
   else renderList();
+  window.scrollTo(0, 0);
 }
 
 async function init() {
