@@ -5,6 +5,7 @@
   "balsamic-chicken",
   "banana-bread",
   "bbq-sauce",
+  "bechamel-sauce",
   "brown-sugar-shortbread",
   "buffalo-cauliflower",
   "buffalo-chicken-fingers",
@@ -34,6 +35,7 @@
   "grilled-eggplant",
   "grilled-rice-balls",
   "ham-cheese-scones",
+  "ham-tomme-de-savoie-mac-and-cheese",
   "herb-potato-salad",
   "honey-balsamic-chicken",
   "honey-bbq-chicken-bites",
@@ -70,7 +72,6 @@
   "pumpkin-pie",
   "red-velvet-cake",
   "roast-potatoes",
-  "rum-punch",
   "soft-sugar-cookies",
   "sourdough-bread",
   "spinach-parmesan-muffins",
@@ -80,5 +81,5 @@
   "vanilla-buttercream-frosting",
   "vanilla-cake",
   "whole-wheat-mac-and-cheese",
-  "yellow-layer-cake"
+  "yellow-cake"
 ]

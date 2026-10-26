@@ -1,16 +1,10 @@
 url,reason
-https://cuisine-addict.com/mac-cheese-a-la-tomme-de-savoie/,Ingredients and steps not present in fetched page content
 https://sallysbakingaddiction.com/easy-honey-chipotle-salmon/,Recipe unpublished; URL redirects to Honey Garlic Soy Glazed Salmon (imported separately)
 https://parmigianoreggiano.us/recipes/risotto-cacio-e-pepe-featuring-parmigiano-reggiano-cheese/,Redirects to the general recipe index
 https://parmigianoreggiano.us/recipes/mushroom-risotto/,Redirects to a recipe listing page
 https://petaleith.com/cacio-e-pepe-ravioli/,Site down for maintenance
 https://verveculture.com/blogs/recipes/recipe-a-step-by-step-guide-to-making-ravioli-at-home,Guide without dough amounts and with an inconsistent filling list
-https://www.lecreuset.com/garlic-and-red-wine-braised-short-ribs-with-creme-fraiche-mash/LCR-2426.html,Page content could not be extracted
-https://www.epicurious.com/recipes/food/views/white-sauce-or-bechamel-sauce-40046,Paywall blocked ingredients and steps
+https://www.lecreuset.com/garlic-and-red-wine-braised-short-ribs-with-creme-fraiche-mash/LCR-2426.html,Blocked by site bot protection (Incapsula)
 https://oat.haus/blogs/blog/granola-butter-cookie-dough-bites-gf-vegan-refined-sugar-free,Page returned HTTP 404
-https://www.lecreuset.no/no_NO/mini-focaccia-med-rosmarin-og-honning/r0000000001947.html,Page content could not be extracted
-https://www.clarkcountynv.gov/government/elected_officials/county_clerk/civil-marriage,Not a recipe (civil marriage info page)
-https://alicedegaetani.com/,Not a recipe (site homepage)
-https://www.thisismeldrake.com/blog-posts/21-of-the-best-drinks-to-make-with-tequila,Not a single recipe (list of 21 drinks)
-https://www.kaktus.no/,Not a recipe (site homepage)
-https://www.systembolaget.se/produkt/vin/domini-veneti-5755201/,Not a recipe (wine product page)
+https://www.lecreuset.no/no_NO/mini-focaccia-med-rosmarin-og-honning/r0000000001947.html,Blocked by site bot protection (Incapsula)
+https://www.lecreuset.com/mini-tiramisus/LCR-2912.html,Blocked by site bot protection (Incapsula)
