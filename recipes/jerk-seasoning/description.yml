@@ -2,5 +2,5 @@ title: Jerk Seasoning
 description: A warm and spicy Jamaican jerk spice blend measured in parts, so you can make as much or as little as you want.
 tags: [jerk, seasoning, spice blend, jamaican, caribbean]
 category: Seasoning
-preheat: null
-cook_time: null
+preheat:
+cook_time:

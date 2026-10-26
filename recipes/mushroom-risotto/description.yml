@@ -2,6 +2,6 @@ title: Mushroom Risotto
 description: Creamy Arborio risotto with sautéed portobello and white mushrooms, finished with butter, Parmesan, and chives.
 tags: [risotto, mushrooms, rice, italian, dinner]
 category: Dinner
-preheat: null
+preheat:
 cook_time: 25 minutes
 url: https://www.allrecipes.com/recipe/85389/gourmet-mushroom-risotto/

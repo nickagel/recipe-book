@@ -2,6 +2,6 @@ title: Pico de Gallo
 description: Fresh chopped salsa of Roma tomatoes, red onion, cilantro, and jalapeño brightened with lime, garlic, and a pinch of cumin.
 tags: [salsa, tomato, mexican, dip, cilantro]
 category: Sauce
-preheat: null
+preheat:
 cook_time: 20 minutes
 url: https://www.allrecipes.com/recipe/203800/pico-de-gallo/

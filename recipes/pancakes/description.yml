@@ -2,6 +2,6 @@ title: Pancakes
 description: Thick and fluffy vanilla pancakes made from scratch without buttermilk.
 tags: [pancakes, breakfast, brunch, vanilla]
 category: Breakfast
-preheat: null
+preheat:
 cook_time: 20 minutes
 url: https://cafedelites.com/best-fluffy-pancakes/

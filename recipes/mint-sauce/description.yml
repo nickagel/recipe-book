@@ -2,6 +2,6 @@ title: Mint Sauce
 description: A classic English-style mint sauce of pureed fresh mint, sugar, salt and cider vinegar, made for serving with lamb.
 tags: [mint, sauce, condiment, english, lamb]
 category: Sauce
-preheat: null
+preheat:
 cook_time: 15 minutes
 url: https://thecookful.com/mint-sauce-recipe/

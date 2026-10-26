@@ -2,7 +2,7 @@ title: Pasta Dough
 description: Simple fresh egg pasta dough at a ratio of 1 large egg per 100g semolina flour; scale up as needed.
 tags: [pasta, dough, fresh pasta, semolina, italian]
 category: Dinner
-preheat: null
-cook_time: null
+preheat:
+cook_time:
 chill: 24 hours in the fridge, or about 30 minutes on the counter (estimate)
 yield: 1 serving per 100g flour

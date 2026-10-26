@@ -1,0 +1,29 @@
+name: Check formatting
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.15'
+
+      - name: Install formatters
+        run: make install PYTHON=python
+
+      - name: Format
+        run: make format PYTHON=python
+
+      - name: Fail if anything changed
+        run: |-
+          if ! git diff --exit-code; then
+            echo "::error::Files are not formatted. Run 'make format' and commit the result."
+            exit 1
+          fi

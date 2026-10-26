@@ -2,6 +2,6 @@ title: Grilled Eggplant
 description: Thick half-moons of eggplant soaked in a balsamic, garlic and herb marinade, grilled until meltingly soft and charred, then tossed back in the marinade.
 tags: [eggplant, grilled, balsamic, mediterranean, side]
 category: Side
-preheat: null
+preheat:
 cook_time: 20 minutes
 url: https://www.mediterraneanliving.com/melt-in-your-mouth-grilled-eggplant/

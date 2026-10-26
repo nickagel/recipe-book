@@ -2,6 +2,6 @@ title: Pineapple Chicken
 description: Bite-sized chicken stir-fried with bell pepper and pineapple in a sweet and savory hoisin soy sauce.
 tags: [chicken, pineapple, stir-fry, dinner]
 category: Dinner
-preheat: null
+preheat:
 cook_time: 15 minutes
 url: https://www.eatingonadime.com/pineapple-chicken-recipe/
