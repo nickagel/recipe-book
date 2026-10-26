@@ -8,12 +8,12 @@ jobs:
   index:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Pinned to 3.x; .python-version's 3.15 may not be available on runners.
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
-          python-version: "3.x"
+          python-version: "3.15"
 
       - name: Rebuild index
         run: make index PYTHON=python
