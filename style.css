@@ -197,6 +197,42 @@ body.detail header h1 {
   margin: 0.35rem 0 0.75rem;
 }
 
+/* Loading state */
+
+#progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-3));
+  transition: width 0.2s ease-out, opacity 0.4s 0.2s;
+}
+
+#progress.done {
+  opacity: 0;
+}
+
+.skeleton {
+  height: 300px;
+  pointer-events: none;
+  background: linear-gradient(100deg, var(--surface) 30%, var(--soft) 50%, var(--surface) 70%) 100% 0 / 300% 100%;
+  animation: pop-in 0.4s both, shimmer 1.4s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
 .empty {
   grid-column: 1 / -1;
   text-align: center;

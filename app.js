@@ -254,8 +254,15 @@ function route() {
 }
 
 async function init() {
+  const progress = document.getElementById('progress');
   const slugs = await fetch('recipes/index.json').then(r => r.json());
-  recipes = (await Promise.all(slugs.map(loadRecipe))).sort((a, b) => a.title.localeCompare(b.title));
+  let loaded = 0;
+  recipes = (await Promise.all(slugs.map(s => loadRecipe(s).then(r => {
+    progress.style.width = `${++loaded / slugs.length * 100}%`;
+    return r;
+  })))).sort((a, b) => a.title.localeCompare(b.title));
+  progress.classList.add('done');
+  resultsEl.removeAttribute('aria-busy');
   searchEl.addEventListener('input', renderList);
   window.addEventListener('hashchange', route);
   route();
