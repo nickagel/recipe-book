@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+    <div id="progress" role="progressbar" aria-label="Loading recipes"></div>
     <header>
       <h1>
         <a href="#">Recipe Book<span class="dot">.</span></a>
@@ -26,7 +27,13 @@
              aria-label="Search recipes">
     </header>
     <main>
-      <ul id="results">
+      <ul id="results" aria-busy="true">
+        <li class="card skeleton" aria-hidden="true"></li>
+        <li class="card skeleton" aria-hidden="true"></li>
+        <li class="card skeleton" aria-hidden="true"></li>
+        <li class="card skeleton" aria-hidden="true"></li>
+        <li class="card skeleton" aria-hidden="true"></li>
+        <li class="card skeleton" aria-hidden="true"></li>
       </ul>
       <article id="recipe" hidden></article>
     </main>
