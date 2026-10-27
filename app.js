@@ -1,7 +1,30 @@
 const searchEl = document.getElementById('search');
 const resultsEl = document.getElementById('results');
 const recipeEl = document.getElementById('recipe');
+const searchRowEl = document.getElementById('search-row');
+const filterToggleEl = document.getElementById('filter-toggle');
+const filtersEl = document.getElementById('filters');
 let recipes = [];
+
+// Each option matches a recipe whose category or tags include any of its terms.
+const FILTERS = {
+  'Meal type': {
+    Breakfast: ['breakfast'],
+    Lunch: ['lunch'],
+    Dinner: ['dinner'],
+    Dessert: ['dessert'],
+  },
+  'Meat type': {
+    Chicken: ['chicken'],
+    Beef: ['beef', 'steak', 'ground beef'],
+    Fish: ['fish', 'seafood', 'salmon', 'halibut'],
+  },
+  Holiday: {
+    Thanksgiving: ['thanksgiving'],
+    Christmas: ['christmas'],
+    Birthday: ['birthday'],
+  },
+};
 
 function parseCSV(text) {
   const rows = [];
@@ -92,6 +115,7 @@ async function loadRecipe(slug) {
   };
   recipe.haystack = [recipe.title, recipe.description, recipe.category, ...tags, ...recipe.measurements]
     .join(' ').toLowerCase();
+  recipe.labels = new Set([recipe.category, ...tags].map(s => s.toLowerCase()));
   return recipe;
 }
 
@@ -115,9 +139,45 @@ function metaLine(r) {
   return p;
 }
 
+function renderFilters() {
+  Object.entries(FILTERS).forEach(([group, options]) => {
+    const fieldset = el('fieldset');
+    fieldset.append(el('legend', group));
+    Object.keys(options).forEach(option => {
+      const label = el('label', '', {
+        className: 'filter-chip'
+      });
+      label.append(el('input', '', {
+        type: 'checkbox',
+        name: group,
+        value: option
+      }), el('span', option));
+      fieldset.append(label);
+    });
+    filtersEl.append(fieldset);
+  });
+  filtersEl.append(el('button', 'Clear filters', {
+    type: 'reset',
+    className: 'filter-clear'
+  }));
+}
+
+// Options OR together within a group; groups AND together.
+function activeFilters() {
+  const data = new FormData(filtersEl);
+  return Object.entries(FILTERS)
+    .map(([group, options]) => data.getAll(group).flatMap(o => options[o]))
+    .filter(terms => terms.length);
+}
+
 function renderList() {
   const terms = searchEl.value.toLowerCase().split(/\s+/).filter(Boolean);
-  const matches = recipes.filter(r => terms.every(t => r.haystack.includes(t)));
+  const groups = activeFilters();
+  const selected = [...new FormData(filtersEl).keys()].length;
+  filterToggleEl.textContent = selected ? `Filters (${selected})` : 'Filters';
+  filterToggleEl.classList.toggle('active', selected > 0);
+  const matches = recipes.filter(r => terms.every(t => r.haystack.includes(t)) &&
+    groups.every(g => g.some(t => r.labels.has(t))));
   resultsEl.replaceChildren(...matches.map(r => {
     const li = el('li', '', {
       className: 'card'
@@ -245,7 +305,9 @@ function route() {
   const slug = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
   const recipe = recipes.find(r => r.slug === slug);
   resultsEl.hidden = !!recipe;
-  searchEl.hidden = !!recipe;
+  searchRowEl.hidden = !!recipe;
+  if (recipe) filtersEl.hidden = true;
+  filterToggleEl.setAttribute('aria-expanded', !filtersEl.hidden);
   recipeEl.hidden = !recipe;
   document.body.classList.toggle('detail', !!recipe);
   if (recipe) renderRecipe(recipe);
@@ -264,6 +326,14 @@ async function init() {
   progress.classList.add('done');
   resultsEl.removeAttribute('aria-busy');
   searchEl.addEventListener('input', renderList);
+  renderFilters();
+  filtersEl.addEventListener('change', renderList);
+  filtersEl.addEventListener('reset', () => setTimeout(renderList));
+  filtersEl.addEventListener('submit', e => e.preventDefault());
+  filterToggleEl.addEventListener('click', () => {
+    filtersEl.hidden = !filtersEl.hidden;
+    filterToggleEl.setAttribute('aria-expanded', !filtersEl.hidden);
+  });
   window.addEventListener('hashchange', route);
   route();
 }
