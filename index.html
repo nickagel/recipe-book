@@ -20,11 +20,19 @@
         <a href="#">Recipe Book<span class="dot">.</span></a>
       </h1>
       <p class="tagline">Good food, saved for later.</p>
-      <input id="search"
-             type="search"
-             placeholder="Search recipes, tags, ingredients…"
-             autocomplete="off"
-             aria-label="Search recipes">
+      <div id="search-row">
+        <input id="search"
+               type="search"
+               placeholder="Search recipes, tags, ingredients…"
+               autocomplete="off"
+               aria-label="Search recipes">
+        <button id="filter-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="filters">Filters</button>
+      </div>
+      <form id="filters" hidden>
+      </form>
     </header>
     <main>
       <ul id="results" aria-busy="true">
