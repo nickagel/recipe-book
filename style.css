@@ -148,8 +148,8 @@ body.detail header h1 {
 }
 
 #filter-toggle.active {
-  color: #fff;
-  background: var(--accent);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 #filters {
@@ -216,8 +216,12 @@ body.detail header h1 {
 }
 
 @media (max-width: 520px) {
+  #search-row {
+    flex-direction: column;
+  }
+
   #filter-toggle {
-    padding: 0 1rem;
+    padding: 0.8rem 1rem;
   }
 }
 
