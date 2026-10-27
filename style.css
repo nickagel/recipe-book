@@ -55,7 +55,7 @@ a {
 
 header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 0;
 }
 
 header h1 {
@@ -79,7 +79,7 @@ header h1 .dot {
   color: var(--muted);
   font-size: 1.1rem;
   font-weight: 300;
-  margin: 0.5rem 0 1.75rem;
+  margin: 0.5rem 0 1rem;
 }
 
 body.detail .tagline {
@@ -116,6 +116,20 @@ body.detail header h1 {
 }
 
 /* Filters */
+
+#toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  margin: 0 -0.75rem 1.75rem;
+  padding: 0.75rem;
+  text-align: center;
+  background: var(--bg);
+}
+
+body.detail #toolbar {
+  display: none;
+}
 
 #search-row {
   display: flex;
@@ -156,6 +170,8 @@ body.detail header h1 {
   max-width: 780px;
   margin: 1rem auto 0;
   padding: 1.25rem 1.5rem;
+  max-height: calc(100dvh - 7rem);
+  overflow-y: auto;
   text-align: left;
   background: var(--surface);
   border-radius: var(--radius);
@@ -222,6 +238,10 @@ body.detail header h1 {
 
   #filter-toggle {
     padding: 0.8rem 1rem;
+  }
+
+  #filters {
+    max-height: calc(100dvh - 12rem);
   }
 }
 

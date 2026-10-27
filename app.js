@@ -13,6 +13,7 @@ const FILTERS = {
     Lunch: ['lunch'],
     Dinner: ['dinner'],
     Dessert: ['dessert'],
+    'Sauce / Marinade': ['sauce', 'salsa', 'condiment', 'marinade'],
   },
   'Meat type': {
     Chicken: ['chicken'],
