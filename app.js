@@ -302,9 +302,12 @@ function renderRecipe(r) {
   recipeEl.append(columns);
 }
 
+let listScrollY = 0;
+
 function route() {
   const slug = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
   const recipe = recipes.find(r => r.slug === slug);
+  if (recipe && !resultsEl.hidden) listScrollY = window.scrollY;
   resultsEl.hidden = !!recipe;
   searchRowEl.hidden = !!recipe;
   if (recipe) filtersEl.hidden = true;
@@ -313,7 +316,7 @@ function route() {
   document.body.classList.toggle('detail', !!recipe);
   if (recipe) renderRecipe(recipe);
   else renderList();
-  window.scrollTo(0, 0);
+  window.scrollTo(0, recipe ? 0 : listScrollY);
 }
 
 async function init() {
