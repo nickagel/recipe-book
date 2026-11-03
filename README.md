@@ -6,11 +6,11 @@ Static recipe search site for GitHub Pages (Settings → Pages → deploy from b
 
 1. Create `recipes/<slug>/` with `description.yml`, `measurements.csv`, `instructions.csv` (CSV files have a header row).
 2. Run `make index` to rebuild `recipes/index.json`.
-3. Optional photos: put them in `recipes/<slug>/images/` and list the filenames in `description.yml`, e.g. `images: [finished.jpg, step-2.jpg]`.
+3. Optional photos: convert them to JPG (browsers other than Safari can't show HEIC), put them in `recipes/<slug>/images/` and list the filenames in `description.yml`, e.g. `images: [finished.jpg, step-2.jpg]`.
 
 The `url` in `description.yml` is not shown on the site; it records the source to pull recipe updates from.
 
-With Claude Code, the `add-recipe` skill (`.claude/skills/add-recipe/SKILL.md`) handles this from a URL or pasted text.
+With Claude Code, the `add-recipe` skill (`.claude/skills/add-recipe/SKILL.md`) handles this from a URL or pasted text, and the `add-photo` skill (`.claude/skills/add-photo/SKILL.md`) adds a photo to an existing recipe, converting it to a resized JPG with metadata stripped (it can also convert existing non-JPG photos).
 
 ## Project layout
 

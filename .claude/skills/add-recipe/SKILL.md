@@ -41,7 +41,7 @@ url: https://example.com/source-recipe/
 - `chill` / `yield`: optional, e.g. `chill: at least 3 hours, preferably overnight`, `yield: 14–15 large cookies`. Omit if not given.
 - Marinades: if no time is given, use `chill: at least 1 hour, ideally overnight` and say the same in the marinate step.
 - `url`: the source page. Not shown on the site; used to pull future updates.
-- `images`: optional. Files live in `recipes/<slug>/images/`; list filenames in display order, e.g. `images: [finished.jpg, step-2.jpg]`. Omit if there are no photos. Only add photos the user provides — don't download images from the source site.
+- `images`: optional. Files live in `recipes/<slug>/images/`; list filenames in display order, e.g. `images: [finished.jpg, step-2.jpg]`. Omit if there are no photos. Only add photos the user provides — don't download images from the source site. Follow the `add-photo` skill to convert them to JPG.
 - `category`: one word/phrase, e.g. Breakfast, Dinner, Dessert, Side, Snack.
 
 ## measurements.csv
