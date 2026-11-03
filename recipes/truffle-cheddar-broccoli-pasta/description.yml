@@ -5,3 +5,4 @@ category: Dinner
 preheat:
 cook_time: 20 minutes
 url:
+images: [finished.jpg]
