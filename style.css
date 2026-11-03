@@ -400,6 +400,16 @@ body.detail #toolbar {
   display: block;
 }
 
+/* Thin frame in the card colour so the photo sits inside the tile; :nth-child(n) outranks the tinted placeholder colours. */
+.card:nth-child(n) .cover:has(img) {
+  border: 0.4rem solid var(--surface);
+  background: var(--surface);
+}
+
+.cover:has(img) img {
+  border-radius: calc(var(--radius) - 0.4rem);
+}
+
 .card-body {
   padding: 1.1rem 1.35rem 1.35rem;
 }
