@@ -4,6 +4,12 @@ const recipeEl = document.getElementById('recipe');
 const searchRowEl = document.getElementById('search-row');
 const filterToggleEl = document.getElementById('filter-toggle');
 const filtersEl = document.getElementById('filters');
+const toolbarEl = document.getElementById('toolbar');
+const azEl = document.getElementById('az');
+const azBubbleEl = el('div', '', {
+  className: 'az-bubble'
+});
+const LETTERS = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
 let recipes = [];
 
 // Each option matches a recipe whose category or tags include any of its terms.
@@ -179,7 +185,20 @@ function renderList() {
   filterToggleEl.classList.toggle('active', selected > 0);
   const matches = recipes.filter(r => terms.every(t => r.haystack.includes(t)) &&
     groups.every(g => g.some(t => r.labels.has(t))));
-  resultsEl.replaceChildren(...matches.map(r => {
+  const letterOf = r => r.title.normalize('NFD').charAt(0).toUpperCase();
+  const groupEls = [];
+  matches.forEach((r, i) => {
+    if (!i || letterOf(matches[i - 1]) !== letterOf(r)) {
+      const group = el('li', '', {
+        className: 'group'
+      });
+      group.dataset.letter = letterOf(r);
+      group.append(el('h2', '', {
+        className: 'section'
+      }));
+      group.firstChild.append(el('span', letterOf(r)));
+      groupEls.push(group);
+    }
     const li = el('li', '', {
       className: 'card'
     });
@@ -204,11 +223,64 @@ function renderList() {
     }));
     if (r.category || r.tags.length) body.append(metaLine(r));
     li.append(cover, body);
-    return li;
-  }));
+    groupEls.at(-1).append(li);
+  });
+  resultsEl.replaceChildren(...groupEls);
   if (!matches.length) resultsEl.append(el('li', 'No recipes found. Try another search!', {
     className: 'empty'
   }));
+  updateAZ();
+}
+
+function updateAZ() {
+  const present = new Set([...resultsEl.querySelectorAll('.group')].map(c => c.dataset.letter));
+  azEl.hidden = !present.size;
+  azEl.querySelectorAll('button').forEach(b => b.classList.toggle('off', !present.has(b.textContent)));
+}
+
+// Jumps to the first card at or after the letter, so empty letters still land somewhere sensible.
+function jumpToLetter(i) {
+  const sections = [...resultsEl.querySelectorAll('.group')];
+  if (!sections.length) return;
+  const target = sections.find(s => s.dataset.letter >= LETTERS[i]) || sections.at(-1);
+  window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - toolbarEl.offsetHeight);
+}
+
+function initAZ() {
+  new ResizeObserver(() => document.documentElement.style.setProperty('--toolbar-h', `${toolbarEl.offsetHeight}px`))
+    .observe(toolbarEl);
+  azEl.append(azBubbleEl, ...LETTERS.map(l => el('button', l, {
+    type: 'button'
+  })));
+  let dragging = false;
+  let hideTimer;
+  const select = e => {
+    const r = azEl.getBoundingClientRect();
+    const y = Math.min(Math.max(e.clientY - r.top, 0), r.height);
+    const i = Math.min(LETTERS.length - 1, Math.floor(y / r.height * LETTERS.length));
+    azBubbleEl.textContent = LETTERS[i];
+    azBubbleEl.style.top = `${y}px`;
+    azBubbleEl.classList.add('show');
+    clearTimeout(hideTimer);
+    jumpToLetter(i);
+  };
+  const end = () => {
+    dragging = false;
+    hideTimer = setTimeout(() => azBubbleEl.classList.remove('show'), 400);
+  };
+  azEl.addEventListener('pointerdown', e => {
+    dragging = true;
+    azEl.setPointerCapture(e.pointerId);
+    select(e);
+  });
+  azEl.addEventListener('pointermove', e => dragging && select(e));
+  azEl.addEventListener('pointerup', end);
+  azEl.addEventListener('pointercancel', end);
+  // Keyboard activation only; pointer input is handled above.
+  azEl.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b && e.detail === 0) jumpToLetter(LETTERS.indexOf(b.textContent));
+  });
 }
 
 function renderRecipe(r) {
@@ -314,8 +386,10 @@ function route() {
   filterToggleEl.setAttribute('aria-expanded', !filtersEl.hidden);
   recipeEl.hidden = !recipe;
   document.body.classList.toggle('detail', !!recipe);
-  if (recipe) renderRecipe(recipe);
-  else renderList();
+  if (recipe) {
+    renderRecipe(recipe);
+    azEl.hidden = true;
+  } else renderList();
   window.scrollTo(0, recipe ? 0 : listScrollY);
 }
 
@@ -331,6 +405,7 @@ async function init() {
   resultsEl.removeAttribute('aria-busy');
   searchEl.addEventListener('input', renderList);
   renderFilters();
+  initAZ();
   filtersEl.addEventListener('change', renderList);
   filtersEl.addEventListener('reset', () => setTimeout(renderList));
   filtersEl.addEventListener('submit', e => e.preventDefault());

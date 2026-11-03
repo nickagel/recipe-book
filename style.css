@@ -247,6 +247,102 @@ body.detail #toolbar {
 
 /* Recipe cards */
 
+/* A-Z jump rail */
+
+#az {
+  position: fixed;
+  left: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 6;
+  width: 1.5rem;
+  height: min(70dvh, 34rem);
+  display: flex;
+  flex-direction: column;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#az button {
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+#az button.off {
+  color: var(--muted);
+  opacity: 0.4;
+}
+
+.az-bubble {
+  position: absolute;
+  left: 2.25rem;
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.az-bubble.show {
+  opacity: 1;
+}
+
+@media (max-width: 1160px) {
+  body:not(.detail) {
+    padding-left: 2.25rem;
+  }
+}
+
+.group {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  gap: 1.5rem;
+  align-content: start;
+}
+
+.section {
+  position: sticky;
+  top: var(--toolbar-h, 0);
+  z-index: 4;
+  grid-column: 1 / -1;
+  height: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.section span {
+  display: inline-block;
+  min-width: 2rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 0 0 0.6rem 0;
+  box-shadow: var(--shadow);
+}
+
 #results {
   list-style: none;
   padding: 0;
