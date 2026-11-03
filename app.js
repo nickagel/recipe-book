@@ -10,6 +10,13 @@ const azBubbleEl = el('div', '', {
   className: 'az-bubble'
 });
 const LETTERS = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
+const lightboxImgEl = el('img');
+const lightboxEl = el('dialog', '', {
+  className: 'lightbox'
+});
+lightboxEl.append(lightboxImgEl);
+lightboxEl.addEventListener('click', () => lightboxEl.close());
+document.body.append(lightboxEl);
 let recipes = [];
 
 // Each option matches a recipe whose category or tags include any of its terms.
@@ -359,8 +366,13 @@ function renderRecipe(r) {
     });
     r.images.forEach(src => {
       const a = el('a', '', {
-        href: src,
-        target: '_blank'
+        href: src
+      });
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        lightboxImgEl.src = src;
+        lightboxImgEl.alt = r.title;
+        lightboxEl.showModal();
       });
       a.append(el('img', '', {
         src,
@@ -385,6 +397,7 @@ function route() {
   if (recipe) filtersEl.hidden = true;
   filterToggleEl.setAttribute('aria-expanded', !filtersEl.hidden);
   recipeEl.hidden = !recipe;
+  lightboxEl.close();
   document.body.classList.toggle('detail', !!recipe);
   if (recipe) {
     renderRecipe(recipe);
