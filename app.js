@@ -254,7 +254,7 @@ function jumpToLetter(i) {
 }
 
 function initAZ() {
-  new ResizeObserver(() => document.documentElement.style.setProperty('--toolbar-h', `${toolbarEl.offsetHeight}px`))
+  new ResizeObserver(() => document.documentElement.style.setProperty('--toolbar-h', `${toolbarEl.getBoundingClientRect().height}px`))
     .observe(toolbarEl);
   azEl.append(azBubbleEl, ...LETTERS.map(l => el('button', l, {
     type: 'button'
