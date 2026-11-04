@@ -322,7 +322,7 @@ body.detail #toolbar {
 
 .section {
   position: sticky;
-  top: var(--toolbar-h, 0);
+  top: calc(var(--toolbar-h, 0px) - 1px);
   z-index: 4;
   grid-column: 1 / -1;
   height: 0;
@@ -331,7 +331,8 @@ body.detail #toolbar {
 }
 
 .section span {
-  display: inline-block;
+  display: block;
+  width: fit-content;
   min-width: 2rem;
   padding: 0.3rem 0.6rem;
   font-size: 1rem;
@@ -339,7 +340,6 @@ body.detail #toolbar {
   text-align: center;
   color: #fff;
   background: var(--accent);
-  border-radius: 0 0 0.6rem 0;
   box-shadow: var(--shadow);
 }
 
