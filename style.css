@@ -599,7 +599,7 @@ body.detail #toolbar {
   margin-bottom: 1.5rem;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .gallery {
     width: 100%;
   }
@@ -657,7 +657,7 @@ body.detail #toolbar {
   align-items: start;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .columns {
     grid-template-columns: 1fr;
   }
@@ -677,6 +677,70 @@ body.detail #toolbar {
   letter-spacing: 0.15em;
   color: var(--accent);
   margin: 0 0 1rem;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.panel-head h3 {
+  margin: 0;
+}
+
+.sizes {
+  display: flex;
+  padding: 0.2rem;
+  background: var(--soft);
+  border-radius: 999px;
+}
+
+.sizes button {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.2rem 0.75rem;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.sizes button[aria-pressed='true'] {
+  color: #fff;
+  background: var(--accent);
+}
+
+/* Stacked 1/2 sized to the digit height of the 1× and 2× labels. */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  vertical-align: middle;
+  margin-right: 0.15em;
+  font-size: 0.62em;
+  line-height: 1;
+  text-align: center;
+}
+
+.frac span:first-child {
+  padding-bottom: 0.02em;
+}
+
+/* The bar is drawn as a background so it can be trimmed to the glyph width. */
+.frac span:last-child {
+  padding-top: 0.23em;
+  background: linear-gradient(currentColor, currentColor) center top / calc(100% - 0.12em) 1.5px no-repeat;
+}
+
+.size-note {
+  margin: -0.5rem 0 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
 }
 
 .ingredients {

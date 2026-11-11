@@ -124,10 +124,13 @@ async function loadRecipe(slug) {
     yield: meta.yield || '',
     tags,
     images: list(meta.images).map(f => `${base}images/${encodeURIComponent(f)}`),
-    measurements: parseCSV(measurements).map(r => r.join(' ').trim()),
+    measurements: parseCSV(measurements).map(r => ({
+      amount: (r[0] || '').trim(),
+      ingredient: r.slice(1).join(' ').trim()
+    })),
     instructions: parseCSV(instructions).map(r => r.join(' ').trim()),
   };
-  recipe.haystack = [recipe.title, recipe.description, recipe.category, ...tags, ...recipe.measurements]
+  recipe.haystack = [recipe.title, recipe.description, recipe.category, ...tags, ...recipe.measurements.map(m => `${m.amount} ${m.ingredient}`)]
     .join(' ').toLowerCase();
   recipe.labels = new Set([recipe.category, ...tags].map(s => s.toLowerCase()));
   return recipe;
@@ -290,18 +293,136 @@ function initAZ() {
   });
 }
 
+// Scales the leading quantity of an amount like "1 1/2 cups (170g)"; text without a leading number is returned as is.
+const SIZES = [{
+  label: '½×',
+  value: 0.5
+}, {
+  label: '1×',
+  value: 1
+}, {
+  label: '2×',
+  value: 2
+}, ];
+const CONTAINER = 'bag|can|jar|block|bottle|container|package|tin';
+const QTY = /\d+\s+\d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?/g;
+const FRACTIONS = [
+  [1 / 16, '1/16'],
+  [1 / 8, '1/8'],
+  [1 / 6, '1/6'],
+  [1 / 4, '1/4'],
+  [1 / 3, '1/3'],
+  [3 / 8, '3/8'],
+  [1 / 2, '1/2'],
+  [5 / 8, '5/8'],
+  [2 / 3, '2/3'],
+  [3 / 4, '3/4'],
+  [5 / 6, '5/6'],
+  [7 / 8, '7/8'],
+];
+
+const toNumber = t => t.trim().split(/\s+/)
+  .reduce((sum, p) => sum + (p.includes('/') ? p.split('/')[0] / p.split('/')[1] : +p), 0);
+
+function formatQty(v, decimal) {
+  if (decimal) return String(v >= 10 ? Math.round(v) : +v.toFixed(2));
+  const whole = Math.floor(v);
+  const frac = v - whole;
+  if (frac < 0.02) return String(whole);
+  if (frac > 0.98) return String(whole + 1);
+  const hit = FRACTIONS.find(([f]) => Math.abs(f - frac) < 0.02);
+  if (!hit) return String(+v.toFixed(2));
+  return whole ? `${whole} ${hit[1]}` : hit[1];
+}
+
+function scaleNumbers(text, k) {
+  return text.replace(QTY, (tok, at) => {
+    // Metric quantities (including the first number of a range) and decimals stay decimal.
+    const metric = /^(?:\s*[–-]\s*[\d./\s]+?)?\s*(?:kg|g|ml|dl|l)\b/i.test(text.slice(at + tok.length));
+    return formatQty(toNumber(tok) * k, metric || tok.includes('.'));
+  });
+}
+
+// Singular at 1 or less, plural above 1 ("1/2 cup", "1 1/2 cups"); a range follows its last number.
+const COUNTED = 'cup|stick|piece|clove|steak|fillet|slice|bunch|head|recipe|crust|' + CONTAINER;
+
+function pluralize(text) {
+  return text.replace(new RegExp(`(\\d(?:[\\d./\\s–-]*\\d)?)\\s+(${COUNTED})s?\\b`, 'gi'), (m, num, word) => {
+    const last = toNumber(num.match(QTY).at(-1));
+    return `${num} ${word}${last > 1 ? 's' : ''}`;
+  });
+}
+
+function scaleAmount(amount, k) {
+  if (k === 1 || !/^\s*\d/.test(amount)) return amount;
+  // A can sized by weight ("13.4 oz can") has no count to scale, so prefix a multiplier.
+  if (new RegExp(`^\\d+(?:\\.\\d+)?\\s*(?:fl\\s)?(?:oz|g|ml)\\s+(?:${CONTAINER})\\b`, 'i').test(amount)) {
+    return `${k === 0.5 ? '½' : k}× ${amount}`;
+  }
+  const open = amount.indexOf('(');
+  let main = open < 0 ? amount : amount.slice(0, open);
+  let rest = open < 0 ? '' : amount.slice(open);
+  const container = new RegExp(`^[\\d\\s./–-]+(?:${CONTAINER})s?\\b`, 'i').test(main);
+  // Parenthetical sizes describe each item ("1 can (15 oz)", "4 (6 oz each)"), not the total.
+  const perItem = container || /^\s*\d+\s*$/.test(main) || /\beach\b/i.test(rest);
+  main = scaleNumbers(main, k);
+  if (!perItem) rest = scaleNumbers(rest, k);
+  return pluralize(main + rest);
+}
+
 function renderRecipe(r) {
   const ul = el('ul', '', {
     className: 'ingredients'
   });
+  const rows = [];
   r.measurements.forEach(m => {
     const label = el('label');
+    const text = el('span', `${m.amount} ${m.ingredient}`.trim());
     label.append(el('input', '', {
       type: 'checkbox'
-    }), el('span', m));
+    }), text);
+    rows.push({
+      m,
+      text
+    });
     const li = el('li');
     li.append(label);
     ul.append(li);
+  });
+  const sizeNote = el('p', 'Amounts are scaled; instructions and times are unchanged.', {
+    className: 'size-note',
+    hidden: true
+  });
+  const sizes = el('div', '', {
+    className: 'sizes'
+  });
+  sizes.setAttribute('role', 'group');
+  sizes.setAttribute('aria-label', 'Recipe size');
+  SIZES.forEach(({
+    label,
+    value
+  }) => {
+    const btn = el('button', value === 0.5 ? '' : label, {
+      type: 'button'
+    });
+    if (value === 0.5) {
+      btn.setAttribute('aria-label', 'Half size');
+      const frac = el('span', '', {
+        className: 'frac'
+      });
+      frac.append(el('span', '1'), el('span', '2'));
+      btn.append(frac, '×');
+    }
+    btn.setAttribute('aria-pressed', value === 1);
+    btn.addEventListener('click', () => {
+      sizes.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === btn));
+      rows.forEach(({
+        m,
+        text
+      }) => text.textContent = `${scaleAmount(m.amount, value)} ${m.ingredient}`.trim());
+      sizeNote.hidden = value === 1;
+    });
+    sizes.append(btn);
   });
   const ol = el('ol', '', {
     className: 'steps'
@@ -330,7 +451,11 @@ function renderRecipe(r) {
   const measurementsCol = el('section', '', {
     className: 'panel'
   });
-  measurementsCol.append(el('h3', 'Measurements'), ul);
+  const measurementsHead = el('div', '', {
+    className: 'panel-head'
+  });
+  measurementsHead.append(el('h3', 'Measurements'), sizes);
+  measurementsCol.append(measurementsHead, sizeNote, ul);
   const instructionsCol = el('section', '', {
     className: 'panel'
   });
