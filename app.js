@@ -444,10 +444,15 @@ function renderRecipe(r) {
     }
     setTimeout(() => share.textContent = '🔗 Share', 2000);
   });
+  const actionsEnd = el('span', '', {
+    className: 'actions-end'
+  });
+  if ('wakeLock' in navigator) actionsEnd.append(awakeSwitch());
+  actionsEnd.append(share);
   back.append(el('a', '← All recipes', {
     href: '#',
     className: 'back'
-  }), share);
+  }), actionsEnd);
   const measurementsCol = el('section', '', {
     className: 'panel'
   });
@@ -513,6 +518,78 @@ function renderRecipe(r) {
 
 let listScrollY = 0;
 
+// Keeps the screen on while a recipe is open; the browser drops the lock when the tab is hidden, so it is re-requested on return.
+let keepAwake = false;
+try {
+  keepAwake = localStorage.getItem('keepAwake') === '1';
+} catch {}
+let wakeLock = null;
+
+async function updateWakeLock() {
+  const want = keepAwake && !recipeEl.hidden && document.visibilityState === 'visible';
+  if (want && !wakeLock) {
+    const request = navigator.wakeLock.request('screen').catch(() => null);
+    wakeLock = request;
+    const lock = await request;
+    if (!lock) {
+      if (wakeLock === request) wakeLock = null;
+      return;
+    }
+    lock.addEventListener('release', () => {
+      if (wakeLock === request) wakeLock = null;
+    });
+  } else if (!want && wakeLock) {
+    const request = wakeLock;
+    wakeLock = null;
+    (await request)?.release();
+  }
+}
+
+function awakeSwitch() {
+  const sw = el('button', '', {
+    type: 'button',
+    className: 'switch'
+  });
+  sw.setAttribute('role', 'switch');
+  sw.setAttribute('aria-checked', keepAwake);
+  sw.append(el('span', '', {
+    className: 'switch-track'
+  }), 'Cook Mode');
+  sw.addEventListener('click', () => {
+    keepAwake = !keepAwake;
+    sw.setAttribute('aria-checked', keepAwake);
+    try {
+      localStorage.setItem('keepAwake', keepAwake ? '1' : '0');
+    } catch {}
+    updateWakeLock();
+  });
+  const tip = el('span', 'Keeps your screen from going dark while you cook.', {
+    className: 'tip',
+    id: 'cook-tip'
+  });
+  tip.setAttribute('role', 'tooltip');
+  const info = el('button', 'i', {
+    type: 'button',
+    className: 'info'
+  });
+  info.setAttribute('aria-label', 'What is Cook Mode?');
+  info.setAttribute('aria-describedby', 'cook-tip');
+  // Hover and focus show the tip via CSS; the click toggle covers touch screens.
+  info.addEventListener('click', e => {
+    e.stopPropagation();
+    tip.classList.toggle('open');
+  });
+  const cook = el('span', '', {
+    className: 'cook'
+  });
+  cook.append(sw, info, tip);
+  return cook;
+}
+
+document.addEventListener('click', () => document.querySelectorAll('.tip.open').forEach(t => t.classList.remove('open')));
+
+document.addEventListener('visibilitychange', updateWakeLock);
+
 function route() {
   const slug = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
   const recipe = recipes.find(r => r.slug === slug);
@@ -529,6 +606,7 @@ function route() {
     azEl.hidden = true;
   } else renderList();
   window.scrollTo(0, recipe ? 0 : listScrollY);
+  updateWakeLock();
 }
 
 async function init() {
