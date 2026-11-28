@@ -1,7 +1,8 @@
 title: Turkey Brine
-description: A pineapple-herb turkey brine with salt, brown sugar, garlic and juniper for a juicy, well-seasoned holiday turkey, with an easy dry-and-roast method.
+description: A pineapple-herb turkey brine with salt, brown sugar, garlic and juniper for a juicy, well-seasoned holiday turkey, finished by air-drying the turkey overnight so it is ready to roast.
 tags: [turkey, brine, pineapple, thanksgiving, roast, dinner]
 category: Dinner
-preheat: 325°F (163°C)
-cook_time: about 3.5–3.75 hours
+preheat:
+cook_time:
+chill: 12–24 hours brining, plus overnight drying
 url: https://www.aspicyperspective.com/best-turkey-brine-recipe/
